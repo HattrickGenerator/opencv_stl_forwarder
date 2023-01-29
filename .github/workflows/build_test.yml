@@ -1,0 +1,21 @@
+name: Configure, Build and Test
+
+on: [push]
+
+jobs:
+  Configure-Build-Test:
+    name: Configure-Build-Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      
+      - name: "Configure Project and build"
+        run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel
+        
+      - name: "Run Tests"
+      	run: ./unit_tests
+        

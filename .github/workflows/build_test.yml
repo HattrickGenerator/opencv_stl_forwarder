@@ -13,6 +13,9 @@ jobs:
         with:
           submodules: recursive
       
+      - uses: Dovyski/setup-opencv-action@latest
+      
+        
       - name: "Configure Project and build and test"
         run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel &&  ./unit_tests
         shell: bash

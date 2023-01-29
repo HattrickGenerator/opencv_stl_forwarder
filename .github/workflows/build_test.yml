@@ -13,7 +13,7 @@ jobs:
         with:
           submodules: recursive
       
-      - name: Install xmllint
+      - name: Install opencv dependency
         run: sudo apt-get install -y libopencv-core-dev
         
       - name: "Configure Project and build and test"

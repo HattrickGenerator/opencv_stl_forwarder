@@ -13,9 +13,6 @@ jobs:
         with:
           submodules: recursive
       
-      - name: "Configure Project and build"
-        run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel
-        
-      - name: "Run Tests"
-      	run: ./unit_tests
-        
+      - name: "Configure Project and build and test"
+        run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel &&  ./unit_tests
+        shell: bash

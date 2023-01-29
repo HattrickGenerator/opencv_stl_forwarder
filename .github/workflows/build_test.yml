@@ -13,7 +13,8 @@ jobs:
         with:
           submodules: recursive
       
-      - uses: Dovyski/setup-opencv-action@v1.1
+      - name: Install xmllint
+        run: sudo apt-get install -y libopencv-core-dev
         
       - name: "Configure Project and build and test"
         run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel &&  ./unit_tests

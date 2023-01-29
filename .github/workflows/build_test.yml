@@ -13,7 +13,7 @@ jobs:
         with:
           submodules: recursive
       
-      - uses: Dovyski/setup-opencv-action@latest
+      - uses: Dovyski/setup-opencv-action@v1.1
       
         
       - name: "Configure Project and build and test"

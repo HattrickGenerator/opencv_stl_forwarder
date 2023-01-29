@@ -16,6 +16,14 @@ jobs:
       - name: Install opencv dependency
         run: sudo apt-get install -y libopencv-dev
         
-      - name: "Configure Project and build and test"
+      - name: Configure project
         run: mkdir build && cd build && cmake -DOPENCV_STL_FORWARDER_BUILD_TESTS=ON .. && cmake --build . --parallel &&  ./unit_tests
+        shell: bash
+        
+      - name: Build project
+        run: cd build && cmake --build . --parallel
+        shell: bash
+
+      - name: Run tests
+        run: cd build && ./unit_tests
         shell: bash

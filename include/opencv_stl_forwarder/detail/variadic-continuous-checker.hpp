@@ -18,7 +18,14 @@ namespace detail {
 /// its pointers This is only valid, if
 /// 1) There is at least one opencvIt
 /// 2) All of the openCV iterators describe conitguous memory
-std::pair<bool, bool> ___it_replacable();
+
+template <typename... Args>
+std::pair<bool, bool> ___it_replacable(Args &&... args);
+
+
+//Specialization for no arguments
+template <typename... Args,
+          typename std::enable_if<sizeof...(Args) == 0, bool>::type = true>
 std::pair<bool, bool> ___it_replacable()
 {
     return {false, true};

@@ -19,7 +19,8 @@ add_subdirectory(${GTEST})
 
 set(SOURCES
     test-main.cpp
-    test_stl_forward.cpp
+    test-stl-forward.cpp
+    test-algorithm.cpp
 )
 
 add_executable(${UNIT_TESTS} ${SOURCES})

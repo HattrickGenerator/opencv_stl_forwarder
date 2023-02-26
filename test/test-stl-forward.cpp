@@ -2,54 +2,13 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 #include <gtest/gtest.h>
-#include "opencv_stl_forwarder/stl/algorithm.hpp"
-#include "opencv2/core.hpp"
+#include "test-header.hpp"
+
 #include <numeric>
 #include <list>
 
 namespace opencv_test { namespace {
 using namespace cv;
-
-// The fixture for testing class Foo.
-class CORE_stl_forward : public ::testing::Test {
- protected:
-
-    void SetUp() override
-    {
-        size_t size = 13;
-        mat = cv::Mat(static_cast<int>(size),static_cast<int>(size),CV_32S);
-        mat_f = cv::Mat_<float>(static_cast<int>(size),static_cast<int>(size));
-
-
-        intVec = std::vector<int>(size*size);
-        intList = std::list<int>(size*size);
-
-        subMat = mat(cv::Rect(2,2,7,7));
-        matSub_f = mat_f(cv::Rect(2,2,7,7));
-
-        std::iota(mat.begin<int>(), mat.end<int>(), -1);
-        std::iota(mat_f.begin(), mat_f.end(), -1.0f);
-
-        std::iota(intVec.begin(), intVec.end(), -1);
-        std::iota(intList.begin(), intList.end(), -1);
-
-        std::iota(subMat.begin(), subMat.end(), -1);
-        std::iota(matSub_f.begin(), matSub_f.end(), -1.0f);
-    }
-
-    void TearDown() override
-    {
-
-    }
-    cv::Mat mat;
-    cv::Mat_<float> mat_f;
-
-    std::vector<int> intVec;
-    std::list<int> intList;
-
-    cv::Mat_<int> subMat;
-    cv::Mat_<float> matSub_f;
-};
 
 //This opencv feature requires return type auto a C++14 feature
 
@@ -213,8 +172,6 @@ TEST_F(CORE_stl_forward, __get_first_cv_it_index_reverse)
     static_assert(cv::detail::__get_first_cv_it_index<decltype(intVec.rbegin()), decltype(mat.rbegin<int>()), decltype(intVec.rbegin())>() == 1, "Wrong index chosen");
 }
 
-
-
 TEST_F(CORE_stl_forward, tuple_replacer_reverse_iterator)
 {
     //Simple example of only opencv iterators being replaced by their pointers
@@ -246,39 +203,4 @@ TEST_F(CORE_stl_forward, tuple_replacer_reverse_iterator)
     static_assert(std::is_same<std::tuple_element<1,decltype(itReplaced_lambda)>::type,std::reverse_iterator<int*>>::value,"CV iterators not replaced with their pointers.");
     static_assert(std::is_same<std::tuple_element<2,decltype(itReplaced_lambda)>::type,int*>::value,"CV iterators not replaced with their pointers.");
 }
-
-
-TEST_F(CORE_stl_forward, count_if_test)
-{
-    auto lambda = [](int val){return val >13 && val < 100;};
-
-    //This test is with replacable iterators.
-    EXPECT_TRUE(cv::detail::__it_replacable(mat.begin<int>(), mat.end<int>(),lambda));
-
-    //Test replaced iterators vs. normal stl algo
-    EXPECT_EQ(experimental::count_if(mat.begin<int>(), mat.end<int>(),lambda), std::count_if(mat.begin<int>(), mat.end<int>(),lambda));
-    EXPECT_EQ(experimental::count_if(mat.rbegin<int>(), mat.rend<int>(),lambda), std::count_if(mat.rbegin<int>(), mat.rend<int>(),lambda));
-    EXPECT_EQ(experimental::count_if(mat.begin<int>(), mat.end<int>(),lambda), std::count_if((int*)mat.begin<int>().ptr, (int*)mat.end<int>().ptr,lambda));
-}
-
-TEST_F(CORE_stl_forward, find_test)
-{
-    //Test replaced iterators vs. normal stl algo
-    EXPECT_EQ(*experimental::find(mat_f.begin(), mat_f.end(),5),*std::find(mat_f.begin(), mat_f.end(),5));
-    EXPECT_EQ(experimental::find(mat_f.begin(), mat_f.end(),5),std::find(mat_f.begin(), mat_f.end(),5));
-
-    //Test reverse iterator vs stl algo
-    EXPECT_EQ(*experimental::find(mat_f.rbegin(), mat_f.rend(),5), *std::find(mat_f.rbegin(), mat_f.rend(),5));
-    EXPECT_EQ(experimental::find(mat_f.rbegin(), mat_f.rend(),5), std::find(mat_f.rbegin(), mat_f.rend(),5));
-
-    EXPECT_EQ(*experimental::find(intVec.begin(), intVec.end(),5),*std::find(intVec.begin(), intVec.end(),5));
-    EXPECT_EQ(*experimental::find(intVec.rbegin(), intVec.rend(),5),*std::find(intVec.rbegin(), intVec.rend(),5));
-
-    std::ptrdiff_t replaced_dist = experimental::find(mat.begin<int>(), mat.end<int>(),10) - mat.begin<int>();
-    std::ptrdiff_t orig_dist = std::find(mat.begin<int>(), mat.end<int>(),10) - mat.begin<int>();
-
-    EXPECT_EQ(replaced_dist, orig_dist);
-}
-
-
 }} // namespace

@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 
+
+option(OPENCV_STL_FORWARDER_BUILD_TESTS ON)
+option(OPENCV_STL_FORWARDER_BUILD_BENCHMARKS ON)
+
 project(opencv_stl_forwarder
         VERSION 0.1
         DESCRIPTION "Foward opencv matrices to stl algorithms to make them run more efficiently."
@@ -29,11 +33,19 @@ target_include_directories(
   INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-
-option(OPENCV_STL_FORWARDER_BUILD_TESTS ON)
+if(OPENCV_STL_FORWARDER_BUILD_BENCHMARKS)
+    if(NOT OPENCV_STL_FORWARDER_BUILD_TESTS)
+        message("Benchmark requires tests. Turning on tests.")
+        set(OPENCV_STL_FORWARDER_BUILD_TESTS ON) #Benchmark requires tests
+    endif()
+endif()
 
 if(OPENCV_STL_FORWARDER_BUILD_TESTS)
     add_subdirectory(test)
+endif()
+
+if(OPENCV_STL_FORWARDER_BUILD_BENCHMARKS)
+    add_subdirectory(benchmark)
 endif()
 
 # locations are provided by GNUInstallDirs

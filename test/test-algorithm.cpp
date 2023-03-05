@@ -56,6 +56,46 @@ TEST_F(CORE_stl_forward, find)
     EXPECT_EQ(replaced_dist, orig_dist);
 }
 
+TEST_F(CORE_stl_forward, find_if)
+{
+    auto lambda = [](int val){return val >13 && val < 100;};
+    //Test replaced iterators vs. normal stl algo
+    EXPECT_EQ(*experimental::find_if(mat_f.begin(), mat_f.end(),lambda),*std::find_if(mat_f.begin(), mat_f.end(),lambda));
+    EXPECT_EQ(experimental::find_if(mat_f.begin(), mat_f.end(),lambda),std::find_if(mat_f.begin(), mat_f.end(),lambda));
+
+    //Test reverse iterator vs stl algo
+    EXPECT_EQ(*experimental::find_if(mat_f.rbegin(), mat_f.rend(),lambda), *std::find_if(mat_f.rbegin(), mat_f.rend(),lambda));
+    EXPECT_EQ(experimental::find_if(mat_f.rbegin(), mat_f.rend(),lambda), std::find_if(mat_f.rbegin(), mat_f.rend(),lambda));
+
+    EXPECT_EQ(*experimental::find_if(intVec.begin(), intVec.end(),lambda),*std::find_if(intVec.begin(), intVec.end(),lambda));
+    EXPECT_EQ(*experimental::find_if(intVec.rbegin(), intVec.rend(),lambda),*std::find_if(intVec.rbegin(), intVec.rend(),lambda));
+
+    std::ptrdiff_t replaced_dist = experimental::find_if(mat.begin<int>(), mat.end<int>(),lambda) - mat.begin<int>();
+    std::ptrdiff_t orig_dist = std::find_if(mat.begin<int>(), mat.end<int>(),lambda) - mat.begin<int>();
+
+    EXPECT_EQ(replaced_dist, orig_dist);
+}
+
+TEST_F(CORE_stl_forward, find_if_not)
+{
+    auto lambda = [](int val){return val >13 && val < 100;};
+    //Test replaced iterators vs. normal stl algo
+    EXPECT_EQ(*experimental::find_if_not(mat_f.begin(), mat_f.end(),lambda),*std::find_if_not(mat_f.begin(), mat_f.end(),lambda));
+    EXPECT_EQ(experimental::find_if_not(mat_f.begin(), mat_f.end(),lambda),std::find_if_not(mat_f.begin(), mat_f.end(),lambda));
+
+    //Test reverse iterator vs stl algo
+    EXPECT_EQ(*experimental::find_if_not(mat_f.rbegin(), mat_f.rend(),lambda), *std::find_if_not(mat_f.rbegin(), mat_f.rend(),lambda));
+    EXPECT_EQ(experimental::find_if_not(mat_f.rbegin(), mat_f.rend(),lambda), std::find_if_not(mat_f.rbegin(), mat_f.rend(),lambda));
+
+    EXPECT_EQ(*experimental::find_if_not(intVec.begin(), intVec.end(),lambda),*std::find_if_not(intVec.begin(), intVec.end(),lambda));
+    EXPECT_EQ(*experimental::find_if_not(intVec.rbegin(), intVec.rend(),lambda),*std::find_if_not(intVec.rbegin(), intVec.rend(),lambda));
+
+    std::ptrdiff_t replaced_dist = experimental::find_if_not(mat.begin<int>(), mat.end<int>(),lambda) - mat.begin<int>();
+    std::ptrdiff_t orig_dist = std::find_if_not(mat.begin<int>(), mat.end<int>(),lambda) - mat.begin<int>();
+
+    EXPECT_EQ(replaced_dist, orig_dist);
+}
+
 /*
 TEST_F(CORE_stl_forward, transform)
 {

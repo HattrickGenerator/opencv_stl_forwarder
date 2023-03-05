@@ -10,6 +10,8 @@
 #include "opencv_stl_forwarder/detail/pointer-tuple-replacer.hpp"
 #include "opencv_stl_forwarder/detail/variadic-continuous-checker.hpp"
 #include "opencv_stl_forwarder/detail/util.hpp"
+#include "opencv_stl_forwarder/detail/forward_macros.hpp"
+
 #include <tuple>
 
 //This opencv feature requires return type auto a C++14 feature
@@ -17,69 +19,9 @@
 namespace cv {
 namespace experimental {
 
-///@brief overload for forwarding a tuple and index sequence with cv iterators
-/// replaced as pointers
-template <typename... Args, std::size_t... Is>
-auto _all_of_impl(std::tuple<Args...> tpl, cv::detail::index_sequence<Is...>){
-  return std::all_of(std::get<Is>(tpl)...);
-}
-
-///@brief Forwarding for stl algorithm with the same name. Decides at runtime if the iterators are replaced with pointers
-/// or kept as cv iterators for non-contiguous matrices.
-template <typename... Args>
-auto all_of(Args&&... args) -> decltype(std::all_of(std::forward<Args>(args)...)){
-
-  if (cv::detail::__it_replacable(std::forward<Args>(args)...)) {
-    return _all_of_impl(
-        cv::detail::make_tpl_replaced(std::forward<Args>(args)...),
-        cv::detail::make_index_sequence_variadic<Args...>());
-  } else {
-    return std::all_of(std::forward<Args>(args)...);
-  }
-}
-
-
-///@brief overload for forwarding a tuple and index sequence with cv iterators
-/// replaced as pointers
-template <typename... Args, std::size_t... Is>
-auto _any_of_impl(std::tuple<Args...> tpl, cv::detail::index_sequence<Is...>) {
-  return std::any_of(std::get<Is>(tpl)...);
-}
-
-///@brief Forwarding for stl algorithm with the same name. Decides at runtime if the iterators are replaced with pointers
-/// or kept as cv iterators for non-contiguous matrices.
-template <typename... Args>
-auto any_of(Args&&... args) -> decltype(std::any_of(std::forward<Args>(args)...)) {
-
-  if (cv::detail::__it_replacable(std::forward<Args>(args)...)) {
-    return _any_of_impl(
-        cv::detail::make_tpl_replaced(std::forward<Args>(args)...),
-        cv::detail::make_index_sequence_variadic<Args...>());
-  } else {
-    return std::any_of(std::forward<Args>(args)...);
-  }
-}
-
-///@brief overload for forwarding a tuple and index sequence with cv iterators
-/// replaced as pointers
-template <typename... Args, std::size_t... Is>
-auto _none_of_impl(std::tuple<Args...> tpl, cv::detail::index_sequence<Is...>) {
-  return std::none_of(std::get<Is>(tpl)...);
-}
-
-///@brief Forwarding for stl algorithm with the same name. Decides at runtime if the iterators are replaced with pointers
-/// or kept as cv iterators for non-contiguous matrices.
-template <typename... Args>
-auto none_of(Args&&... args) -> decltype(std::none_of(std::forward<Args>(args)...)){
-
-  if (cv::detail::__it_replacable(std::forward<Args>(args)...)) {
-    return _none_of_impl(
-        cv::detail::make_tpl_replaced(std::forward<Args>(args)...),
-        cv::detail::make_index_sequence_variadic<Args...>());
-  } else {
-    return std::none_of(std::forward<Args>(args)...);
-  }
-}
+STL_FORWARD_NO_IT_RETURN(all_of)
+STL_FORWARD_NO_IT_RETURN(any_of)
+STL_FORWARD_NO_IT_RETURN(none_of)
 
 ///@brief overload for forwarding a tuple and index sequence with cv iterators
 /// replaced as pointers

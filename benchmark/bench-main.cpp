@@ -6,7 +6,7 @@
 
 #include <benchmark/benchmark.h>
 
-constexpr size_t size = 120;
+constexpr size_t size = 20;
 cv::Mat setupMatrixInt()
 {
     cv::Mat mat;
@@ -62,7 +62,7 @@ static void find_experimental(benchmark::State& state) {
   const cv::Mat mat = setupMatrixInt();
   for (auto _ : state) {
     // This code gets timed
-    const auto val = *cv::experimental::find(mat.begin<int>(), mat.end<int>(),112);
+    const auto val = *cv::experimental::find(mat.begin<int>(), mat.end<int>(),16);
     benchmark::DoNotOptimize(val);
   }
 }
@@ -72,7 +72,7 @@ static void find_stl_pointer(benchmark::State& state) {
   const cv::Mat mat = setupMatrixInt();
   for (auto _ : state) {
     // This code gets timed
-    const auto val = *std::find((int*)mat.begin<int>().ptr, (int*)mat.end<int>().ptr,112);
+    const auto val = *std::find((int*)mat.begin<int>().ptr, (int*)mat.end<int>().ptr,16);
     benchmark::DoNotOptimize(val);
   }
 }
@@ -82,15 +82,15 @@ static void find_stl_iterator(benchmark::State& state) {
   const cv::Mat mat = setupMatrixInt();
   for (auto _ : state) {
     // This code gets timed
-    const auto val = *std::find(mat.begin<int>(), mat.end<int>(),112);
+    const auto val = *std::find(mat.begin<int>(), mat.end<int>(),16);
     benchmark::DoNotOptimize(val);
   }
 }
 
 // Register the function as a benchmark
-BENCHMARK(count_if_experimental);
-BENCHMARK(count_if_stl_pointer);
-BENCHMARK(count_if_stl_iterator);
+//BENCHMARK(count_if_experimental);
+//BENCHMARK(count_if_stl_pointer);
+//BENCHMARK(count_if_stl_iterator);
 
 // Register the function as a benchmark
 BENCHMARK(find_experimental);

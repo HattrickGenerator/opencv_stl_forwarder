@@ -15,7 +15,7 @@ find_package(OpenCV REQUIRED)
 
 
 file(GLOB DETAIL_HDR_FILES ${PROJECT_SOURCE_DIR}/include/opencv_stl_forwarder/detail/*.hpp)
-file(GLOB STL_HDR_FILES ${PROJECT_SOURCE_DIR}/include/opencv_stl_forwarder/detail/*.hpp)
+file(GLOB STL_HDR_FILES ${PROJECT_SOURCE_DIR}/include/opencv_stl_forwarder/stl/*.hpp)
 
 add_library(${PROJECT_NAME} INTERFACE ${DETAIL_HDR_FILES} ${STL_HDR_FILES})
 # add alias so the project can be uses with add_subdirectory
